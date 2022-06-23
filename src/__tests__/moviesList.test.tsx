@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import MoviesList from "../components/MoviesList";
 import searchData from "../mocks/searchData";
@@ -25,18 +25,18 @@ describe("When show movies list", () => {
         <MoviesList />
       </Provider>
     );
-
-    store.dispatch(searchSuccess({ data: searchData }));
-
-    const resultList = store.getState().search.data?.results || [];
+    act(() => {
+      store.dispatch(searchSuccess({ data: searchData }));
+    });
 
     const moviesListContent = screen.getByTestId("movies-list-content");
+
     const moviesListContentItems = screen.getAllByTestId("movies-list-item");
 
     moviesListContentItems.forEach((moviesListContentItem) => {
       expect(moviesListContent).toContainElement(moviesListContentItem);
     });
 
-    expect(moviesListContentItems.length).toBe(resultList.length);
+    expect(moviesListContentItems.length).toBe(searchData.results.length);
   });
 });

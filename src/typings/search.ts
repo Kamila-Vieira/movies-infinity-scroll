@@ -22,6 +22,9 @@ export interface SearchActionSuccess extends SearchAction {
 export interface SearchActionLoading extends SearchAction {
   payload: SearchLoadingPayload;
 }
+export interface SearchActionPaging extends SearchAction {
+  payload: SearchPagingPayload;
+}
 
 export enum SearchTypes {
   SEARCH_REQUEST = "SEARCH_REQUEST",
@@ -29,6 +32,7 @@ export enum SearchTypes {
   SEARCH_FAILURE = "SEARCH_FAILURE",
   SEARCH_RESET = "SEARCH_RESET",
   UPDATE_LOADING = "UPDATE_LOADING",
+  UPDATE_PAGE = "UPDATE_PAGE",
 }
 export interface SearchDataPayload {
   data: SearchData;
@@ -46,6 +50,9 @@ export interface SearchRequestPayload {
 }
 export interface SearchLoadingPayload {
   loading: boolean;
+}
+export interface SearchPagingPayload {
+  page: number;
 }
 
 export interface SearchSelector {

@@ -9,7 +9,6 @@ import { Provider } from "react-redux";
 import SearchBar from "../components/SearchBar";
 import { DEBOUNCE_LOADING_TIMEOUT } from "../constants";
 import store from "../store";
-import { searchReset } from "../store/modules/search/actions";
 
 const FAKE_QUERY = "batman";
 
@@ -73,28 +72,4 @@ describe("When handle search movies", () => {
       jest.advanceTimersByTime(1);
     });
   });
-
-  //TODO: Ajustar erro quando não houver query
-  // it("should not search without query", async () => {
-  //   render(
-  //     <Provider store={store}>
-  //       <SearchBar />
-  //     </Provider>
-  //   );
-
-  //   const searchBarInput = screen.getByTestId("search-bar-input");
-  //   fireEvent.change(searchBarInput, { target: { value: "" } });
-
-  //   act(() => {
-  //     jest.advanceTimersByTime(DEBOUNCE_LOADING_TIMEOUT);
-  //   });
-
-  //   const state = store.getState();
-  //   console.log(state);
-  //   expect(state.search.error).toBe(true);
-
-  //   act(() => {
-  //     jest.advanceTimersByTime(1);
-  //   });
-  // });
 });

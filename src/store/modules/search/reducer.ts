@@ -2,6 +2,7 @@ import type { Reducer } from "redux";
 import {
   SearchAction,
   SearchActionLoading,
+  SearchActionPaging,
   SearchActionRequest,
   SearchActionSuccess,
   SearchState,
@@ -37,13 +38,18 @@ const reducer: Reducer<SearchState, SearchAction> = (
         error: false,
         data: (action as SearchActionSuccess).payload.data,
       };
-    case SearchTypes.SEARCH_RESET:
-      return { ...DEFAULT_STATE };
     case SearchTypes.UPDATE_LOADING:
       return {
-        ...DEFAULT_STATE,
+        ...state,
         loading: (action as SearchActionLoading).payload.loading,
       };
+    case SearchTypes.UPDATE_PAGE:
+      return {
+        ...state,
+        page: (action as SearchActionPaging).payload.page,
+      };
+    case SearchTypes.SEARCH_RESET:
+      return { ...DEFAULT_STATE };
     default:
       return state;
   }

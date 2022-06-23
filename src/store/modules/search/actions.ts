@@ -3,6 +3,7 @@ import {
   SearchTypes,
   SearchRequestPayload,
   SearchLoadingPayload,
+  SearchPagingPayload,
 } from "../../../typings/search";
 
 export function searchRequest(payload: SearchRequestPayload) {
@@ -34,6 +35,13 @@ export function searchReset() {
 export function searchUpdateLoading(payload: SearchLoadingPayload) {
   return {
     type: SearchTypes.UPDATE_LOADING,
+    payload,
+  };
+}
+
+export function searchUpdatePage(payload: SearchPagingPayload) {
+  return {
+    type: SearchTypes.UPDATE_PAGE,
     payload,
   };
 }

@@ -10,10 +10,6 @@ import { searchSuccess, searchFailure } from "./actions";
 
 function* searchRequest({ payload }: SearchRequest) {
   try {
-    if (!payload?.query || !payload?.page) {
-      yield put(searchFailure());
-    }
-
     if (payload?.isInitial) {
       const { data }: SearchDataPayload = yield call(
         api.get,
