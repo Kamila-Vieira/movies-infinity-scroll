@@ -19,13 +19,17 @@ export interface SearchActionRequest extends SearchAction {
 export interface SearchActionSuccess extends SearchAction {
   payload: SearchDataPayload;
 }
+export interface SearchActionLoading extends SearchAction {
+  payload: SearchLoadingPayload;
+}
 
 export enum SearchTypes {
   SEARCH_REQUEST = "SEARCH_REQUEST",
   SEARCH_SUCCESS = "SEARCH_SUCCESS",
   SEARCH_FAILURE = "SEARCH_FAILURE",
+  SEARCH_RESET = "SEARCH_RESET",
+  UPDATE_LOADING = "UPDATE_LOADING",
 }
-
 export interface SearchDataPayload {
   data: SearchData;
 }
@@ -39,6 +43,9 @@ export interface SearchRequestPayload {
   query?: string;
   isInitial: boolean;
   page?: number;
+}
+export interface SearchLoadingPayload {
+  loading: boolean;
 }
 
 export interface SearchSelector {

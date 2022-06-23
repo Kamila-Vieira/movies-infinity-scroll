@@ -1,40 +1,100 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import { Provider } from "react-redux";
 import SearchBar from "../components/SearchBar";
+import { DEBOUNCE_LOADING_TIMEOUT } from "../constants";
 import store from "../store";
-import { SearchTypes } from "../typings/search";
+import { searchReset } from "../store/modules/search/actions";
+
+const FAKE_QUERY = "batman";
+
+beforeEach(() => {
+  jest.useFakeTimers();
+});
+
+afterEach(() => {
+  jest.runOnlyPendingTimers();
+  jest.useRealTimers();
+});
 
 describe("When handle search movies", () => {
   it("should have a search bar form", () => {
-    render(<SearchBar />);
-
-    const searchBarContainer = screen.getByTestId("search-bar");
-    const searchBarForm = screen.getByTestId("search-bar-form");
-    const searchBarInput = screen.getByTestId("search-bar-input");
-    const searchBarButton = screen.getByTestId("search-bar-button");
-    expect(searchBarContainer).toBeInTheDocument();
-    expect(searchBarContainer).toContainElement(searchBarForm);
-    expect(searchBarForm).toContainElement(searchBarInput);
-    expect(searchBarForm).toContainElement(searchBarButton);
-  });
-
-  it("should update context query", () => {
-    const query = "batman";
     render(
       <Provider store={store}>
         <SearchBar />
       </Provider>
     );
+
+    const searchBarContainer = screen.getByTestId("search-bar");
     const searchBarInput = screen.getByTestId("search-bar-input");
+    expect(searchBarContainer).toBeInTheDocument();
+    expect(searchBarContainer).toContainElement(searchBarInput);
+  });
 
-    fireEvent.input(searchBarInput, { target: { value: query } });
+  it("should not handle search without debouce", () => {
+    render(
+      <Provider store={store}>
+        <SearchBar />
+      </Provider>
+    );
 
-    store.dispatch({
-      type: SearchTypes.SEARCH_REQUEST,
-      payload: { query, page: 1, isInitial: false },
+    const searchBarInput = screen.getByTestId("search-bar-input");
+    fireEvent.change(searchBarInput, { target: { value: FAKE_QUERY } });
+
+    const state = store.getState();
+    expect(state.search.query).not.toBe(FAKE_QUERY);
+    expect(state.search.data).toBeNull();
+  });
+
+  it("should update context properties on search", async () => {
+    render(
+      <Provider store={store}>
+        <SearchBar />
+      </Provider>
+    );
+
+    const searchBarInput = screen.getByTestId("search-bar-input");
+    fireEvent.change(searchBarInput, { target: { value: FAKE_QUERY } });
+
+    act(() => {
+      jest.advanceTimersByTime(DEBOUNCE_LOADING_TIMEOUT);
     });
 
     const state = store.getState();
-    expect(state.search.query).toBe(query);
+    expect(state.search.query).toBe(FAKE_QUERY);
+    expect(state.search.loading).toBe(true);
+
+    act(() => {
+      jest.advanceTimersByTime(1);
+    });
   });
+
+  //TODO: Ajustar erro quando não houver query
+  // it("should not search without query", async () => {
+  //   render(
+  //     <Provider store={store}>
+  //       <SearchBar />
+  //     </Provider>
+  //   );
+
+  //   const searchBarInput = screen.getByTestId("search-bar-input");
+  //   fireEvent.change(searchBarInput, { target: { value: "" } });
+
+  //   act(() => {
+  //     jest.advanceTimersByTime(DEBOUNCE_LOADING_TIMEOUT);
+  //   });
+
+  //   const state = store.getState();
+  //   console.log(state);
+  //   expect(state.search.error).toBe(true);
+
+  //   act(() => {
+  //     jest.advanceTimersByTime(1);
+  //   });
+  // });
 });

@@ -10,21 +10,20 @@ import { searchSuccess, searchFailure } from "./actions";
 
 function* searchRequest({ payload }: SearchRequest) {
   try {
-    if (payload.isInitial) {
+    if (!payload?.query || !payload?.page) {
+      yield put(searchFailure());
+    }
+
+    if (payload?.isInitial) {
       const { data }: SearchDataPayload = yield call(
         api.get,
         `/movie/popular?api_key=${API_KEY}&language=${API_LANGUAGE}&page=${payload.page}`
       );
       yield put(searchSuccess({ data }));
-      if (api.defaults.headers.hasOwnProperty("Authorization")) {
-        (api.defaults.headers as any).Authorization = API_KEY
-          ? `Bearer ${API_KEY}`
-          : "";
-      }
     } else {
       const { data }: SearchDataPayload = yield call(
         api.get,
-        `/search/movie?language=${API_LANGUAGE}&query=${payload?.query}&page=${payload.page}`
+        `/search/movie?api_key=${API_KEY}&language=${API_LANGUAGE}&query=${payload?.query}&page=${payload.page}`
       );
       yield put(searchSuccess({ data }));
     }

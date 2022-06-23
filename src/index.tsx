@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import MoviesList from "./components/MoviesList";
+import { BrowserRouter } from "react-router-dom";
+import Header from "./components/Header";
 import Routes from "./routes";
 import store from "./store";
 
@@ -11,8 +12,10 @@ const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Routes />
-      <MoviesList />
+      <BrowserRouter>
+        <Header />
+        <Routes />
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>
 );

@@ -2,6 +2,7 @@ import {
   SearchDataPayload,
   SearchTypes,
   SearchRequestPayload,
+  SearchLoadingPayload,
 } from "../../../typings/search";
 
 export function searchRequest(payload: SearchRequestPayload) {
@@ -21,5 +22,18 @@ export function searchSuccess(payload: SearchDataPayload) {
 export function searchFailure() {
   return {
     type: SearchTypes.SEARCH_FAILURE,
+  };
+}
+
+export function searchReset() {
+  return {
+    type: SearchTypes.SEARCH_RESET,
+  };
+}
+
+export function searchUpdateLoading(payload: SearchLoadingPayload) {
+  return {
+    type: SearchTypes.UPDATE_LOADING,
+    payload,
   };
 }

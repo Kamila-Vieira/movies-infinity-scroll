@@ -1,6 +1,7 @@
 import type { Reducer } from "redux";
 import {
   SearchAction,
+  SearchActionLoading,
   SearchActionRequest,
   SearchActionSuccess,
   SearchState,
@@ -24,17 +25,24 @@ const reducer: Reducer<SearchState, SearchAction> = (
       return {
         ...state,
         loading: true,
-        query: (action as SearchActionRequest).payload?.query || "",
+        query: (action as SearchActionRequest).payload?.query || state.query,
         page: (action as SearchActionRequest).payload?.page,
       };
     case SearchTypes.SEARCH_FAILURE:
-      return { ...state, loading: false, error: true, data: null };
+      return { ...DEFAULT_STATE, loading: false, error: true, data: null };
     case SearchTypes.SEARCH_SUCCESS:
       return {
         ...state,
         loading: false,
         error: false,
         data: (action as SearchActionSuccess).payload.data,
+      };
+    case SearchTypes.SEARCH_RESET:
+      return { ...DEFAULT_STATE };
+    case SearchTypes.UPDATE_LOADING:
+      return {
+        ...DEFAULT_STATE,
+        loading: (action as SearchActionLoading).payload.loading,
       };
     default:
       return state;
