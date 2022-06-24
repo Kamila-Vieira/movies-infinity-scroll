@@ -4,8 +4,9 @@ export interface SearchState {
   data: SearchData | null;
   error: boolean;
   loading: boolean;
-  query: string;
-  page?: number;
+  query?: string;
+  page: number;
+  isInitial: boolean;
 }
 
 export interface SearchAction {
@@ -33,6 +34,7 @@ export enum SearchTypes {
   SEARCH_RESET = "SEARCH_RESET",
   UPDATE_LOADING = "UPDATE_LOADING",
   UPDATE_PAGE = "UPDATE_PAGE",
+  UPDATE_IS_INITIAL = "UPDATE_IS_INITIAL",
 }
 export interface SearchDataPayload {
   data: SearchData;
@@ -46,7 +48,7 @@ export interface SearchRequest {
 export interface SearchRequestPayload {
   query?: string;
   isInitial: boolean;
-  page?: number;
+  page: number;
 }
 export interface SearchLoadingPayload {
   loading: boolean;

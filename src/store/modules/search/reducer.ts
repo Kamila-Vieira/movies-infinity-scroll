@@ -13,8 +13,8 @@ const DEFAULT_STATE: SearchState = {
   data: null,
   error: false,
   loading: false,
-  query: "",
   page: 1,
+  isInitial: false,
 };
 
 const reducer: Reducer<SearchState, SearchAction> = (
@@ -23,12 +23,21 @@ const reducer: Reducer<SearchState, SearchAction> = (
 ) => {
   switch (action.type) {
     case SearchTypes.SEARCH_REQUEST:
-      return {
+      const newState = {
         ...state,
         loading: true,
-        query: (action as SearchActionRequest).payload?.query || state.query,
-        page: (action as SearchActionRequest).payload?.page,
+        isInitial: (action as SearchActionRequest).payload.isInitial,
+        page: (action as SearchActionRequest).payload.page,
       };
+
+      if (
+        (action as SearchActionRequest).payload?.query &&
+        !(action as SearchActionRequest).payload.isInitial
+      ) {
+        newState.query = (action as SearchActionRequest).payload?.query;
+      }
+
+      return { ...newState };
     case SearchTypes.SEARCH_FAILURE:
       return { ...DEFAULT_STATE, loading: false, error: true, data: null };
     case SearchTypes.SEARCH_SUCCESS:
