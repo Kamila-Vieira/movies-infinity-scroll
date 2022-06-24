@@ -3,6 +3,7 @@ export const API_BASE_URL = "https://api.themoviedb.org/3";
 export const BASE_IMAGE_SOURCE = "https://image.tmdb.org/t/p/original";
 export const API_LANGUAGE = "pt-BR";
 export const DEBOUNCE_LOADING_TIMEOUT = 500;
+export const LIST_ITEMS_PER_VIEW = 4;
 export const POSTER_LIST_SIZE = { width: "", height: "" };
 export const POSTER_PAGE_SIZE = { width: "", height: "" };
 export const SOURCE_VIMEO_PREFIX = "https://player.vimeo.com/video";
