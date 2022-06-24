@@ -3,10 +3,7 @@ import debouce from "lodash.debounce";
 import { DEBOUNCE_LOADING_TIMEOUT } from "../constants";
 import { useDispatch, useSelector } from "react-redux";
 import { SearchSelector, SearchState } from "../typings/search";
-import {
-  searchRequest,
-  searchUpdatePage,
-} from "../store/modules/search/actions";
+import { searchUpdatePage } from "../store/modules/search/actions";
 
 //TODO: implementar melhorias na busca infinita
 
@@ -18,11 +15,11 @@ export default function useInfinityScroll() {
   const [loadingFetch, setLoadingFetch] = useState(false);
 
   const handleFetchMore = useCallback(() => {
-    dispatch(searchUpdatePage({ page: state.page + 1 }));
-    console.log("chamando 2");
-    dispatch(searchRequest({ ...state }));
+    //if (state.data) dispatch(searchUpdatePage({ page: state.page + 1 }));
+    // console.log("chamando 2");
+
     setLoadingFetch(false);
-  }, [dispatch, state]);
+  }, []);
 
   const debouncedFetchResults = useMemo(() => {
     setLoadingFetch(true);

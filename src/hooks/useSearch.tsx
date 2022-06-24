@@ -15,11 +15,10 @@ export default function useSearch() {
       dispatch(searchUpdateLoading({ loading: true }));
 
       if (!value || !value.trim()) {
-        console.log("chamando 3");
         dispatch(searchRequest({ isInitial: true, page: 1 }));
         return;
       }
-      console.log("chamando 4");
+
       dispatch(searchRequest({ query: value, isInitial: false, page: 1 }));
     },
     [dispatch]

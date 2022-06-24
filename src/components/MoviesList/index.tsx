@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useInfinityScroll from "../../hooks/useInfinityScroll";
 import useSearch from "../../hooks/useSearch";
@@ -14,18 +14,22 @@ import InfinityScroll from "../InfinityScroll";
 import { Container, List, ListItem } from "./styles";
 
 export default function MoviesList() {
+  const [moviesList, setMoviesList] = useState<SearchMovieItem[]>([]);
   const dispatch = useDispatch();
   const state = useSelector<SearchSelector, SearchState>(
     (state) => state.search
   );
-  // const { debouncedFetchResults, loadingFetch } = useInfinityScroll();
-
-  // useEffect(() => {
-  //   console.log("movies", state.data?.results);
-  // }, [state.data?.results]);
+  const { debouncedFetchResults, loadingFetch } = useInfinityScroll();
 
   useEffect(() => {
-    console.log("chamando 1");
+    setMoviesList(state.data?.results || []);
+
+    return () => {
+      setMoviesList([]);
+    };
+  }, [state.data?.results]);
+
+  useEffect(() => {
     dispatch(searchRequest({ isInitial: true, page: 1 }));
 
     return () => {
@@ -33,19 +37,23 @@ export default function MoviesList() {
     };
   }, [dispatch]);
 
+  useEffect(() => {
+    console.log("loadingFetch", loadingFetch);
+  }, [loadingFetch]);
+
   return (
     <Container data-testid="movies-list">
       <List data-testid="movies-list-content">
-        {state.data?.results.map(({ id, title }) => {
+        {moviesList.map(({ id, title }) => {
           return (
             <ListItem key={id} data-testid="movies-list-item">
               {title}
             </ListItem>
           );
         })}
-        {/*   {loadingFetch && <strong>IS FETCHING...</strong>}
+        {loadingFetch && <strong>IS FETCHING...</strong>}
 
-        <InfinityScroll fetchMore={debouncedFetchResults} /> */}
+        <InfinityScroll fetchMore={debouncedFetchResults} />
       </List>
     </Container>
   );

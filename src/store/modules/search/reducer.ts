@@ -13,7 +13,7 @@ const DEFAULT_STATE: SearchState = {
   data: null,
   error: false,
   loading: false,
-  page: 1,
+  page: 0,
   isInitial: false,
 };
 
